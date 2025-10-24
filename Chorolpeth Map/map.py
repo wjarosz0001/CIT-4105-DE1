@@ -46,5 +46,6 @@ fig.update_traces(marker_line_color='black', marker_line_width=0.5)
 
 # Show the interactive map
 fig.show()
+# Save the map as an HTML file
 fig.write_html("index.html")
 
