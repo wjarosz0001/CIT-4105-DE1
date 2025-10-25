@@ -50,6 +50,7 @@ fig = px.choropleth(
     color_continuous_scale="Viridis",
     scope="usa",
     title="Data Breaches by State Including Unknowns",
+    labels={"count": "Breaches"} 
 )
 
 fig.update_layout(
