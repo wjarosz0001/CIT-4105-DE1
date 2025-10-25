@@ -121,6 +121,6 @@ fig.update_layout(
 
 # Render & save
 fig.show()
-fig.write_html("index.html")
+fig.write_html("Chorolpeth Map/index.html")
 
 #https://wjarosz0001.github.io/CIT-4105-DE1/Chorolpeth%20Map
