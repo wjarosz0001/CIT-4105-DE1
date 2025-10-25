@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 
 # Load and inspect the dataset
 
-file_path = "Chorolpeth Map/Data_Breach_Chronology_sample.csv"
+file_path = "Chorolpeth MapV2/Data_Breach_Chronology_sample.csv"
 df = pd.read_csv(file_path, delimiter='|', engine='python')
 
 
@@ -121,6 +121,6 @@ fig.update_layout(
 
 # Render & save
 fig.show()
-fig.write_html("Chorolpeth Map/index.html")
+fig.write_html("Chorolpeth MapV2/index.html")
 
 #https://wjarosz0001.github.io/CIT-4105-DE1/Chorolpeth%20Map
