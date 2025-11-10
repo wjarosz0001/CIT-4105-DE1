@@ -39,7 +39,14 @@ valid_codes = {
     "ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK",
     "OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY","DC"
 }
-plot_df = counts[counts["state"].isin(valid_codes)].copy()
+
+all_states_df = pd.DataFrame({"state": sorted(valid_codes)})
+plot_df = all_states_df.merge(
+    counts[counts["state"].isin(valid_codes)],
+    on="state",
+    how="left"
+).fillna({"count": 0})
+plot_df["count"] = plot_df["count"].astype(int)
 
 #Plotting
 fig = px.choropleth(
@@ -48,6 +55,7 @@ fig = px.choropleth(
     locationmode="USA-states",
     color="count",
     color_continuous_scale="Viridis",
+    range_color=(0, plot_df["count"].max() if plot_df["count"].max() > 0 else 1),
     scope="usa",
     title="Data Breaches by State Including Unknowns",
     labels={"count": "Breaches"} 
