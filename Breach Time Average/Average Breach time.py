@@ -4,7 +4,7 @@ from io import BytesIO
 import base64
 
 # ----------------- Load Data -----------------
-file = "Data Breach Time for breach type Hack.xlsx"
+file = "Breach Time Average/Data Breach Time for breach type Hack.xlsx"
 df = pd.read_excel(file)
 
 # Map organization type codes to full names
@@ -89,7 +89,7 @@ table, th, td {{ border: 1px solid black; border-collapse: collapse; padding: 6p
 </html>
 """
 
-with open("breach_duration_report.html", "w", encoding="utf-8") as f:
+with open("Breach Time Average/breach_duration_report.html", "w", encoding="utf-8") as f:
     f.write(html)
 
 print("\nHTML report created: breach_duration_report.html")

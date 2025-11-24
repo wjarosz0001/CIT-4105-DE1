@@ -1,6 +1,6 @@
 import pandas as pd
 
-INPUT_CSV = "Unique_Cell_Strings for column K.csv"
+INPUT_CSV = "Filter by Keyword Graph/Unique_Cell_Strings for column K.csv"
 
 def categorize_item(item):
     medical_keywords = ["health", "insurance", "patient", "hiv", "mychart",
@@ -73,6 +73,11 @@ buf.seek(0)
 img_base64 = base64.b64encode(buf.read()).decode('utf-8')
 buf.close()
 
+
+# Prepare table with capitalized headers
+table_df = counts.reset_index()
+table_df.columns = ["Category", "Count"]
+
 # ---- HTML REPORT ----
 html = f"""
 <html>
@@ -83,6 +88,7 @@ body {{ font-family: Arial, sans-serif; margin: 20px; }}
 h1 {{ font-size: 22px; }}
 img {{ max-width: 800px; border:1px solid #aaa; padding:10px; }}
 table, th, td {{ border: 1px solid black; border-collapse: collapse; padding: 5px; }}
+th {{ text-align: left; }}
 </style>
 </head>
 <body>
@@ -93,11 +99,12 @@ table, th, td {{ border: 1px solid black; border-collapse: collapse; padding: 5p
 <img src="data:image/png;base64,{img_base64}" />
 
 <h2>Category Counts</h2>
-{counts.to_frame().to_html()}
+{table_df.to_html(index=False)}
 
 </body>
 </html>
 """
 
-with open("index.html", "w", encoding="utf-8") as f:
+
+with open("Filter by Keyword Graph/index.html", "w", encoding="utf-8") as f:
     f.write(html)
