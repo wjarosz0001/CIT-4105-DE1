@@ -1,5 +1,10 @@
 import pandas as pd
 
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report
+
 INPUT_CSV = "Filter by Keyword Graph/Unique_Cell_Strings for column K.csv"
 
 def categorize_item(item):
@@ -46,6 +51,36 @@ TARGET_COLUMN = df.columns[0]
 
 df["Category"] = df[TARGET_COLUMN].apply(categorize_item)
 
+
+X = df[TARGET_COLUMN].astype(str)
+y = df["Category"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.3,
+    random_state=42,
+    stratify=y
+)
+
+vectorizer = TfidfVectorizer(stop_words="english")
+X_train_vec = vectorizer.fit_transform(X_train)
+X_test_vec = vectorizer.transform(X_test)
+
+clf = LogisticRegression(max_iter=2000)
+clf.fit(X_train_vec, y_train)
+
+y_pred = clf.predict(X_test_vec)
+
+accuracy = accuracy_score(y_test, y_pred)
+report_text = classification_report(y_test, y_pred)
+
+sample_results = pd.DataFrame({
+    "Text": X_test.iloc[:10].values,
+    "Actual Category": y_test.iloc[:10].values,
+    "Predicted Category": y_pred[:10]
+})
+
 # ---- CHART ----
 import matplotlib.pyplot as plt
 from io import BytesIO
@@ -62,23 +97,21 @@ plt.ylabel("Count")
 plt.ylim(0, max(counts) + 20)
 plt.tight_layout()
 
-# Add labels above bars
 for i, v in enumerate(counts):
     plt.text(i, v + 0.5, str(v), ha='center', fontweight='bold')
 
-# Save plot to memory buffer for HTML embedding
 buf = BytesIO()
 plt.savefig(buf, format="png")
 buf.seek(0)
 img_base64 = base64.b64encode(buf.read()).decode('utf-8')
 buf.close()
 
-
-# Prepare table with capitalized headers
 table_df = counts.reset_index()
 table_df.columns = ["Category", "Count"]
 
-# ---- HTML REPORT ----
+# Convert classification report newlines to <br> for HTML
+report_html = report_text.replace("\n", "<br>")
+
 html = f"""
 <html>
 <head>
@@ -89,6 +122,7 @@ h1 {{ font-size: 22px; }}
 img {{ max-width: 800px; border:1px solid #aaa; padding:10px; }}
 table, th, td {{ border: 1px solid black; border-collapse: collapse; padding: 5px; }}
 th {{ text-align: left; }}
+pre {{ background-color: #f4f4f4; padding: 10px; border-radius: 4px; }}
 </style>
 </head>
 <body>
@@ -101,10 +135,24 @@ th {{ text-align: left; }}
 <h2>Category Counts</h2>
 {table_df.to_html(index=False)}
 
+<h2>Classification</h2>
+<p>
+For this question, we treat the dataset as a classification problem: 
+given the text in each record, we predict which category it belongs to 
+(Medical Information, Financial Information, Personal Information, etc.).
+</p>
+
+<p><b>Classification Accuracy:</b> {accuracy:.3f}</p>
+
+<h3>Sample Predictions (Actual vs Predicted)</h3>
+{sample_results.to_html(index=False)}
+
+<h3>Classification Report</h3>
+<pre>{report_text}</pre>
+
 </body>
 </html>
 """
-
 
 with open("Filter by Keyword Graph/index.html", "w", encoding="utf-8") as f:
     f.write(html)

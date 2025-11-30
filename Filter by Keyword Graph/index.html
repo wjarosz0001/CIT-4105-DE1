@@ -8,6 +8,7 @@ h1 { font-size: 22px; }
 img { max-width: 800px; border:1px solid #aaa; padding:10px; }
 table, th, td { border: 1px solid black; border-collapse: collapse; padding: 5px; }
 th { text-align: left; }
+pre { background-color: #f4f4f4; padding: 10px; border-radius: 4px; }
 </style>
 </head>
 <body>
@@ -52,6 +53,93 @@ th { text-align: left; }
     </tr>
   </tbody>
 </table>
+
+<h2>Classification</h2>
+<p>
+For this question, we treat the dataset as a classification problem: 
+given the text in each record, we predict which category it belongs to 
+(Medical Information, Financial Information, Personal Information, etc.).
+</p>
+
+<p><b>Classification Accuracy:</b> 0.801</p>
+
+<h3>Sample Predictions (Actual vs Predicted)</h3>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Text</th>
+      <th>Actual Category</th>
+      <th>Predicted Category</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Medical data</td>
+      <td>Medical Information</td>
+      <td>Medical Information</td>
+    </tr>
+    <tr>
+      <td>Points in the user's account</td>
+      <td>Financial Information</td>
+      <td>Financial Information</td>
+    </tr>
+    <tr>
+      <td>Social Security number</td>
+      <td>Personal Information</td>
+      <td>Personal Information</td>
+    </tr>
+    <tr>
+      <td>Credit or Debit card numbers</td>
+      <td>Financial Information</td>
+      <td>Financial Information</td>
+    </tr>
+    <tr>
+      <td>CVV/CVC2/CID/CVDs (security codes on the front or back of the card)</td>
+      <td>Financial Information</td>
+      <td>Financial Information</td>
+    </tr>
+    <tr>
+      <td>Course-level data</td>
+      <td>Other</td>
+      <td>Other</td>
+    </tr>
+    <tr>
+      <td>Family information</td>
+      <td>Personal Information</td>
+      <td>Personal Information</td>
+    </tr>
+    <tr>
+      <td>1099 information</td>
+      <td>Financial Information</td>
+      <td>Financial Information</td>
+    </tr>
+    <tr>
+      <td>Patient Email</td>
+      <td>Medical Information</td>
+      <td>Medical Information</td>
+    </tr>
+    <tr>
+      <td>Citizenship status</td>
+      <td>Personal Information</td>
+      <td>Other</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Classification Report</h3>
+<pre>                               precision    recall  f1-score   support
+
+          Digital Identifiers       1.00      0.29      0.44         7
+        Financial Information       0.90      0.97      0.93        58
+          Medical Information       0.96      0.88      0.92        50
+                        Other       0.77      0.34      0.48        29
+         Personal Information       0.63      0.93      0.75        59
+School and Career Information       0.91      0.56      0.69        18
+
+                     accuracy                           0.80       221
+                    macro avg       0.86      0.66      0.70       221
+                 weighted avg       0.83      0.80      0.79       221
+</pre>
 
 </body>
 </html>
